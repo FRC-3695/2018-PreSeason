@@ -7,27 +7,26 @@
 
 package frc.robot.Commands;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.Constants;
 import frc.robot.OI;
 import frc.robot.Robot;
+import frc.robot.Util.Util;
 
-public class ButtonCommandShoot extends Command {
-  public ButtonCommandShoot() {
-    requires(Robot.SUB_SHOOTER);
+public class ManualCommandRiseByVelocity extends Command {
+  public ManualCommandRiseByVelocity() {
+    requires(Robot.SUB_ELEVATOR);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Robot.SUB_SHOOTER.setFiring(true);
-    DriverStation.reportWarning("FIRING", false);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.SUB_SHOOTER.shootByJoystick(OI.DRIVER);
+    Robot.SUB_ELEVATOR.riseByJoystick(OI.DRIVER, Util.getAndSetDouble("Elevator Inhibitor", Constants.ElevatorInhibitor));
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -39,14 +38,11 @@ public class ButtonCommandShoot extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    Robot.SUB_SHOOTER.setFiring(false);
-    Robot.SUB_SHOOTER.stopShooting();
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-    end();
   }
 }
